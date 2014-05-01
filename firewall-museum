@@ -1,0 +1,19 @@
+# Allow DHCP and DNS requests from any user:
+iptables -t nat -A prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -p udp --dport 67 -j ACCEPT
+iptables -t nat -A prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -p tcp --dport 67 -j ACCEPT
+iptables -t nat -A prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -p udp --dport 53 -j ACCEPT
+iptables -t nat -A prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -p tcp --dport 53 -j ACCEPT
+iptables -t nat -A prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -p udp --dport 22 -j ACCEPT
+iptables -t nat -A prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -p tcp --dport 22 -j ACCEPT
+
+# All other traffic goes to the portal page: 
+iptables -t nat -A prerouting_rule -p tcp -j DNAT --to 127.0.0.1:80
+iptables -t nat -A prerouting_rule -p udp -j DNAT --to 127.0.0.1:80
+
+# Create a captive NET where approved users will go and we have full control of how they behave:
+iptables -t nat -N NET
+iptables -t nat -A PREROUTING -j NET
+iptables -t nat -A NET -j ACCEPT
+
+iptables -t nat -I prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -d "museum" -j ACCEPT
+iptables -t nat -I prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -d "data.museum" -j ACCEPT
