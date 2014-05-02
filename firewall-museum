@@ -17,3 +17,5 @@ iptables -t nat -A NET -j ACCEPT
 
 iptables -t nat -I prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -d "museum" -j ACCEPT
 iptables -t nat -I prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -d "data.museum" -j ACCEPT
+iptables -t nat -I prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -d "museum.loc" -j ACCEPT
+iptables -t nat -I prerouting_rule -m state --state NEW,ESTABLISHED,RELATED,INVALID -d "data.museum.loc" -j ACCEPT
